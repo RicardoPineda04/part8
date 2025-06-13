@@ -102,6 +102,7 @@ const typeDefs = `#graphql
         name: String!,
         id: ID!,
         born: Int,
+        bookCount: Int
     }
     type Book {
         title: String!,
@@ -112,6 +113,7 @@ const typeDefs = `#graphql
     }
     type Query {
         allBooks: [Book!]!
+        allAuthors: [Author!]!
         bookCount: Int!
         authorCount: Int!
     }
@@ -122,8 +124,16 @@ const resolvers = {
     allBooks: (root, args) => {
         return books
     },
+    allAuthors: (root, args) => {
+        return authors
+    },
     bookCount: () => books.length,
     authorCount: () => authors.length
+  },
+  Author: {
+    bookCount: (parent) => {
+      return books.filter(book => book.author === parent.name).length
+    }
   }
 }
 
